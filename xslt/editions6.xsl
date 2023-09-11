@@ -87,47 +87,38 @@
                                                 </a>
                                             </h1>
                                         </xsl:if>
-                                    </div>
-                                    <h3>Title Statement</h3>
-                                    <xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:titleStmt"></xsl:apply-templates><p/>
-                                    <h3>Publication Statement</h3>
-                                    <xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:publicationStmt/tei:publisher"></xsl:apply-templates><p/>
-                                    <h3>ID Number and Handle</h3>
-                                    <xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:publicationStmt/tei:idno[1]/text()"></xsl:apply-templates><br/>
-                                    <xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:publicationStmt/tei:idno[2]/text()"></xsl:apply-templates><xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:notesStmt"></xsl:apply-templates><p/>
-                                    <h3>MS Description</h3>
-                                    <h4>MS Identifier</h4>   
-                                    <table border="1">
-                                        <tr bgcolor="#f0be0a">
-                                            <th style="text-align:centre">Country</th>
-                                            <th style="text-align:centre">Settlement</th>
-                                            <th style="text-align:centre">Institution</th>
-                                            <th style="text-align:centre">Repository</th>
-                                            <th style="text-align:centre">ID Number</th>
-                                        </tr>
-                                        <tr>    
-                                            <td><xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:msDesc/tei:msIdentifier/tei:country/text()"></xsl:apply-templates></td>
-                                            <td><xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:msDesc/tei:msIdentifier/tei:settlement/text()"></xsl:apply-templates></td>
-                                            <td><xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:msDesc/tei:msIdentifier/tei:institution/text()"></xsl:apply-templates></td>
-                                            <td><xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:msDesc/tei:msIdentifier/tei:repository/text()"></xsl:apply-templates></td>
-                                            <td><xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:msDesc/tei:msIdentifier/tei:idno/text()"></xsl:apply-templates></td>
-                                        </tr>
-                                    </table><p/>
-                                    <h4>MS Contents: Summary</h4>
-                                    <xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:msDesc/tei:msContents"></xsl:apply-templates><p/>
-                                    <h4>Physical Description</h4>
-                                    <xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:msDesc/tei:physDesc"></xsl:apply-templates><p/>
-                                    <h4>History</h4>
-                                    <xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:msDesc/tei:history"></xsl:apply-templates><p/>
-                                    <h4>Additional</h4>
-                                    <xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:msDesc/tei:additional"></xsl:apply-templates><p/>
-                                    <h3>Profile Description</h3>
-                                    <xsl:apply-templates select=".//tei:teiHeader/tei:profileDesc"></xsl:apply-templates>
+                                    </div>                                   
                                 </div>
                                 <div id="editor-widget">
                                     <p>Text Editor</p>
                                     <xsl:call-template name="annotation-options"></xsl:call-template>
                                 </div>
+                            </div>
+                            <div class="card-header">                                
+                                <xsl:apply-templates select=".//tei:teiHeader"></xsl:apply-templates>
+                                <html>
+                                    <msDesc>
+                                        <h2>MS Identifier</h2>
+                                        <table border="1">
+                                            <tr bgcolor="#f0be0a">
+                                                <th style="text-align:centre">Country</th>
+                                                <th style="text-align:centre">Settlement</th>
+                                                <th style="text-align:centre">Institution</th>
+                                                <th style="text-align:centre">Repository</th>
+                                                <th style="text-align:centre">ID Number</th>
+                                            </tr>
+                                            <xsl:for-each select="fileDesc/sourceDesc/msDesc/msIdentifier">
+                                                <tr>    
+                                                    <td><xsl:value-of select="country" /></td>
+                                                    <td><xsl:value-of select="settlement" /></td>
+                                                    <td><xsl:value-of select="institution" /></td>
+                                                    <td><xsl:value-of select="repository" /></td>
+                                                    <td><xsl:value-of select="idno" /></td>
+                                                </tr>
+                                            </xsl:for-each>    
+                                        </table>
+                                    </msDesc> 
+                                </html>
                             </div>
                             <div class="card-body">                                
                                 <xsl:apply-templates select=".//tei:body"></xsl:apply-templates>
