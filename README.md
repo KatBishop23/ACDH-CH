@@ -168,7 +168,8 @@ git push -u origin main
 At the end of ```<div class="card-header">```, before the closing ```</div>```, add the following to ensure the header is rendered in the HTML file:
 ```
 <div class="card-header">
-    <xsl:apply-templates select=".//tei:teiHeader"></xsl:apply-templates>
+	...
+	<xsl:apply-templates select=".//tei:teiHeader"></xsl:apply-templates>
 </div>
 ```
 This will add the text from the header in its entirety as a chunk of text.
