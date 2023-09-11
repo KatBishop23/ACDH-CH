@@ -165,62 +165,57 @@ git push -u origin main
 
 ## Adapt XSLT to new input data
 ### Adapt the stylesheet xslt/editions.xsl to render the full ```<tei:teiHeader>```
-Above ```<div class="card-body">```, add the following to ensure the header is rendered in the HTML file:
+At the end of ```<div class="card-header">```, before the closing ```</div>```, add the following to ensure the header is rendered in the HTML file:
 ```
 <div class="card-header">
     <xsl:apply-templates select=".//tei:teiHeader"></xsl:apply-templates>
 </div>
 ```
+This will add the text from the header in its entirety as a chunk of text.
 
 ### Adapt the stylesheet to render the output of the ```<tei:msDesc>``` element and its descendants (e.g. msIdentifier)
-I tried rendering the element in a few ways, but did not manage to render it in my several attempts. I believe the issue may be related to my use of XPath to select the correct nodes.
-
-My approach was to create a table for the elements in msIdentifier.
+After some issues, I was finally able to render the output of the msDesc element and its descendants, and I also rendered the title and publication statements to be more readable. For msIdentifier, I decided to create a table.
 
 The final version:
 ```
 <div class="card-header">
-    <xsl:apply-templates select=".//tei:teiHeader"></xsl:apply-templates>
-        <html>
-            <ms_Desc>
-                <h2>MS Identifier</h2>
-                <table border="1">
-    <tr bgcolor="#f0be0a">
-    <th style="text-align:centre">Country</th>
-    <th style="text-align:centre">Settlement</th>
-    <th style="text-align:centre">Institution</th>
-    <th style="text-align:centre">Repository</th>
-    <th style="text-align:centre">ID Number</th>
-    </tr>
-    <xsl:for-each select="/TEI/teiHeader[1]/fileDesc[1]/sourceDesc[1]/msDesc[1]/msIdentifier[1]">
-        <tr>
-        <td><xsl:value-of select="/TEI/teiHeader[1]/fileDesc[1]/sourceDesc[1]/msDesc[1]/msIdentifier[1]/country[1]" /></td>
-        </tr>
-        <tr>
-        <td><xsl:value-of select="/TEI/teiHeader[1]/fileDesc[1]/sourceDesc[1]/msDesc[1]/msIdentifier[1]/settlement[1]" /></td>
-        </tr>
-        <tr>
-        <td><xsl:value-of select="/TEI/teiHeader[1]/fileDesc[1]/sourceDesc[1]/msDesc[1]/msIdentifier[1]/institution[1]" /></td>
-        </tr>
-        <tr>
-        <td><xsl:value-of select="/TEI/teiHeader[1]/fileDesc[1]/sourceDesc[1]/msDesc[1]/msIdentifier[1]/repository[1]" /></td>
-        </tr>
-        <tr>
-        <td><xsl:value-of select="/TEI/teiHeader[1]/fileDesc[1]/sourceDesc[1]/msDesc[1]/msIdentifier[1]/idno[1]" /></td>
-        </tr>
-        </xsl:for-each>
-        </table>
-        </ms_Desc>
-        </html>               
-</div>
-```
-This created a table (header row), but did not insert the values from the XML file. Since the code had worked with other XML files with which I experimented, I believe it was an issue with the identification of the correct node using XPath.
-
-I also noted that the text that was part of the ```<msDesc>``` element had already been included as part of the header in general, so I tried to exclude ```<msDesc>``` in the header (editions4.xsl) so that I could include the text separately using my table, but this unfortunately also did not work:
-```
-<div class="card-header">
-    <xsl:apply-templates select=".//tei:teiHeader[not(./tei:msDesc)]"></xsl:apply-templates>
-    ...
+	...
+	<h3>Title Statement</h3>
+	<xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:titleStmt"></xsl:apply-templates><p/>
+	<h3>Publication Statement</h3>
+	<xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:publicationStmt/tei:publisher"></xsl:apply-templates><p/>
+	<h3>ID Number and Handle</h3>
+	<xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:publicationStmt/tei:idno[1]/text()"></xsl:apply-templates><br/>
+	<xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:publicationStmt/tei:idno[2]/text()"></xsl:apply-templates>
+	<xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:notesStmt"></xsl:apply-templates><p/>
+	<h3>MS Description</h3>
+	<h4>MS Identifier</h4>   
+	<table border="1">
+		<tr bgcolor="#f0be0a">
+			<th style="text-align:centre">Country</th>
+	                <th style="text-align:centre">Settlement</th>
+        	        <th style="text-align:centre">Institution</th>
+        	        <th style="text-align:centre">Repository</th>
+        	        <th style="text-align:centre">ID Number</th>
+	        </tr>
+        	<tr>    
+                	<td><xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:msDesc/tei:msIdentifier/tei:country/text()"></xsl:apply-templates></td>
+                	<td><xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:msDesc/tei:msIdentifier/tei:settlement/text()"></xsl:apply-templates></td>
+                	<td><xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:msDesc/tei:msIdentifier/tei:institution/text()"></xsl:apply-templates></td>
+                	<td><xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:msDesc/tei:msIdentifier/tei:repository/text()"></xsl:apply-templates></td>
+                	<td><xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:msDesc/tei:msIdentifier/tei:idno/text()"></xsl:apply-templates></td>
+        	</tr>
+	</table><p/>
+	<h4>MS Contents: Summary</h4>
+	<xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:msDesc/tei:msContents"></xsl:apply-templates><p/>
+	<h4>Physical Description</h4>
+	<xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:msDesc/tei:physDesc"></xsl:apply-templates><p/>
+	<h4>History</h4>
+	<xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:msDesc/tei:history"></xsl:apply-templates><p/>
+	<h4>Additional</h4>
+	<xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:msDesc/tei:additional"></xsl:apply-templates><p/>
+	<h3>Profile Description</h3>
+	<xsl:apply-templates select=".//tei:teiHeader/tei:profileDesc"></xsl:apply-templates>               
 </div>
 ```
 

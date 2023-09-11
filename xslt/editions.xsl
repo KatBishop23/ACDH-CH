@@ -94,7 +94,8 @@
                                     <xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:publicationStmt/tei:publisher"></xsl:apply-templates><p/>
                                     <h3>ID Number and Handle</h3>
                                     <xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:publicationStmt/tei:idno[1]/text()"></xsl:apply-templates><br/>
-                                    <xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:publicationStmt/tei:idno[2]/text()"></xsl:apply-templates><xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:notesStmt"></xsl:apply-templates><p/>
+                                    <xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:publicationStmt/tei:idno[2]/text()"></xsl:apply-templates>
+                                    <xsl:apply-templates select=".//tei:teiHeader/tei:fileDesc/tei:notesStmt"></xsl:apply-templates><p/>
                                     <h3>MS Description</h3>
                                     <h4>MS Identifier</h4>   
                                     <table border="1">
